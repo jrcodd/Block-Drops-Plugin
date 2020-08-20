@@ -68,9 +68,9 @@ public class DropsGUI {
 			for (String itemNumber : dropsConfig
 					.getConfigurationSection("Drops." + mat).getKeys(false)) {
 				item = dropsConfig
-						.getItemStack("Drops." + mat + "." + itemNumber);
+						.getItemStack("Drops." + mat + "." + itemNumber, new ItemStack(Material.ACACIA_BOAT));
 				chance = dropsConfig.getDouble(
-						"Drops." + mat + "." + itemNumber + "." + item);
+						"Drops." + mat + "." + itemNumber + "." + item, 100.0);
 				data.addItem(item, chance);
 			}
 			drops.put(Material.getMaterial(mat), data);
