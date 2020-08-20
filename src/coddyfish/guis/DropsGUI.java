@@ -86,7 +86,7 @@ public class DropsGUI {
 	 * @version 8/20/20
 	 * @param p the player that will open the gui
 	 * @param type the material for the inventory to correspond to
-	 * @return the inventory for th player to open
+	 * @return the inventory for the player to open
 	 */
 	public Inventory GUI(Player p, Material type) {
 		setBlockClicked(type);
