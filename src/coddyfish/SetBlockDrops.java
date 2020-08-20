@@ -34,8 +34,6 @@ public class SetBlockDrops extends JavaPlugin {
 		this.signMenuFactory = new SignMenuFactory(this);
 		saveDefaultConfig();
 		loadFiles();
-		ConfigurationSerialization.registerClass(DropData.class,
-				"BlockDropsData");
 		new SetDrops(this);
 		ui = new DropsGUI();
 		ui.initialize(this);

@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
  *
  */
 @SerializableAs("BlockDropsData")
-public class DropData implements ConfigurationSerializable {
+public class DropData  {
 	LinkedHashMap<ItemStack, Double> data;
 	public DropData() {
 		data = new LinkedHashMap<ItemStack, Double>();
@@ -29,7 +29,7 @@ public class DropData implements ConfigurationSerializable {
 		return data;
 	}
 	public void addItem(ItemStack i) {
-		data.put(i, 0.0);
+		data.put(i, 100.0);
 	}
 	public void addItem(ItemStack i, double chance) {
 		data.put(i, chance);
@@ -54,23 +54,22 @@ public class DropData implements ConfigurationSerializable {
 		if(data.size() == 0) {
 			return;
 		}
+		
 		for (ItemStack i : data.keySet()) {
+			if(data.get(i) == null) {
+			data.put(i, 100.0);
+		}
 			if (d < data.get(i)) {
 				location.getWorld().dropItemNaturally(location, i);
 
 			}
 		}
 	}
-	@Override
-	public Map<String, Object> serialize() {
-		LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>();
-		for (ItemStack i : getData().keySet()) {
-			result.put("ItemStack", i);
-			result.put("ItemStack." + i, getData().get(i));
-		}
-
-		return result;
+	public String toString() {
+		return data.toString();
+		
 	}
+	
 	public int size() {
 		return data.keySet().size();
 	}

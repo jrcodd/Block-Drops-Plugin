@@ -34,10 +34,9 @@ public class mineListener implements Listener {
 		Block block = e.getBlock();
 		Location blockLoc = block.getLocation();
 		if (DropsGUI.drops.containsKey(e.getBlock().getType())) {
-			for (int i = 0; i < DropsGUI.drops.get(mat).size(); i++) {
 				System.out.println(DropsGUI.drops.get(mat));
 				DropsGUI.drops.get(mat).dropItem(blockLoc);
-			}
+			
 		}
 		DropsGUI.apply(p);
 

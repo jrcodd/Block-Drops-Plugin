@@ -67,7 +67,6 @@ public class DropsGUI {
 			// iterate through all the item numbers
 			for (String itemNumber : dropsConfig
 					.getConfigurationSection("Drops." + mat).getKeys(false)) {
-
 				item = dropsConfig
 						.getItemStack("Drops." + mat + "." + itemNumber);
 				chance = dropsConfig.getDouble(
@@ -80,6 +79,47 @@ public class DropsGUI {
 		System.out.println(
 				"-----------------------------------------------------------------------------------------------");
 		System.out.println(drops);
+	}
+	public static void saveData(LinkedHashMap<Material, DropData> drops) {
+		// config format: Drops.Material_Name.Number.ItemStack.Chance_To_Drop
+		Set<Material> mats = drops.keySet();
+		// make the config section if there is not already one
+		FileConfiguration dropsConfig = plugin.getDropsConfig();
+		if (dropsConfig.getConfigurationSection("Drops") == null) {
+			System.out.println(
+					"there is no confiuration section\nCreating one now...");
+			dropsConfig.createSection("Drops");
+			if (dropsConfig.getConfigurationSection("Drops") != null) {
+				System.out.println("Success!");
+			} else {
+				System.out.println("Something went wrong...");
+				return;
+			}
+		}
+		// config format: Drops.Material_Name.Number.ItemStack.Chance_To_Drop
+		// iterate through all the materials in the config section
+		for (Material mat : mats) {
+			dropsConfig.set("Drops", mat);
+			for (int i = 0; i < drops.get(mat).getData().keySet().size(); i++) {
+				ItemStack item = (ItemStack) drops.get(mat).getData().keySet()
+						.toArray()[i];
+				System.out.println(item);
+				dropsConfig.set("Drops." + mat, i);
+				dropsConfig.set("Drops." + mat + "." + i, item);
+				dropsConfig.set("Drops." + mat.name() + "." + i + "." + item,
+						drops.get(mat).getData().get(item));
+			}
+		}
+		try {
+			dropsConfig.save(plugin.getDropsFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println(
+				"-----------------------------------------------------------------------------------------------");
+		System.out.println(drops);
+
 	}
 	/**
 	 * @author Coddyfish
@@ -173,66 +213,8 @@ public class DropsGUI {
 		p.closeInventory();
 		System.out.println(drops);
 	}
-	public static void saveData(LinkedHashMap<Material, DropData> drops) {
-		// config format: Drops.Material_Name.Number.ItemStack.Chance_To_Drop
-		Set<Material> mats = drops.keySet();
-		// make the config section if there is not already one
-		FileConfiguration dropsConfig = plugin.getDropsConfig();
-		if (dropsConfig.getConfigurationSection("Drops") == null) {
-			System.out.println(
-					"there is no confiuration section\nCreating one now...");
-			dropsConfig.createSection("Drops");
-			if (dropsConfig.getConfigurationSection("Drops") != null) {
-				System.out.println("Success!");
-			} else {
-				System.out.println("Something went wrong...");
-				return;
-			}
-		}
-		// config format: Drops.Material_Name.Number.ItemStack.Chance_To_Drop
-		// iterate through all the materials in the config section
-		for (Material mat : mats) {
-			dropsConfig.set("Drops", mat);
-			for (int i = 0; i < drops.get(mat).getData().keySet().size(); i++) {
-				ItemStack item = (ItemStack) drops.get(mat).getData().keySet()
-						.toArray()[i];
-				System.out.println(item);
-				dropsConfig.set("Drops." + mat, i);
-				dropsConfig.set("Drops." + mat + "." + i, item);
-				dropsConfig.set("Drops." + mat.name() + "." + i + "." + item,
-						drops.get(mat).getData().get(item));
-			}
-		}
-		try {
-			dropsConfig.save(plugin.getDropsFile());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-		System.out.println(
-				"-----------------------------------------------------------------------------------------------");
-		System.out.println(drops);
 
-	}
-	// public void setChance(Player p, Double dropChance) {
-	// System.out.println(dropChance);
-	// for (ItemStack i : drops.get(blockClicked).getData().keySet()) {
-	// for (Double c : drops.get(blockClicked).getData().values()) {
-	// drops.get(blockClicked).addItem(i,c);
-	// }
-	// }
-	// drops.get(blockClicked).addItem(itemClicked,dropChance);
-	//
-	// System.out.println(drops);
-	// for (int i = 0; i < drops.get(blockClicked).getData().keySet().size();
-	// i++) {
-	// ItemStack item = drops.get(blockClicked).getData().keySet().stream()
-	// .collect(Collectors.toList()).get(i);
-	// saveData(drops);
-	//
-	//
-	// }
-	// }
 	public static Material getBlockClicked() {
 		return blockClicked;
 	}
