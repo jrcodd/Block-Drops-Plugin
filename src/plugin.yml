@@ -1,0 +1,9 @@
+name: BlockDrops
+author: Coddyfish
+version: 1.0
+main: coddyfish.SetBlockDrops
+depend: [ProtocolLib]
+api-version: 1.16
+commands:
+   
+  togglesetdrops: 
