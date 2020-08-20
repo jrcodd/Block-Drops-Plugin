@@ -30,18 +30,16 @@ public class mineListener implements Listener {
 		if (setDrops.equals("true")) {
 			p.sendMessage("You just broke " + mat);
 		}
-		DropsGUI ui = new DropsGUI();
-		System.out.println(ui.drops);
+		System.out.println(DropsGUI.drops);
 		Block block = e.getBlock();
 		Location blockLoc = block.getLocation();
-		World world = block.getWorld();
-		if (ui.drops.containsKey(e.getBlock().getType())) {
-			for (int i = 0; i < ui.drops.get(mat).size(); i++) {
-				System.out.println(ui.drops.get(mat));
-				ui.drops.get(mat).dropItem(blockLoc);
+		if (DropsGUI.drops.containsKey(e.getBlock().getType())) {
+			for (int i = 0; i < DropsGUI.drops.get(mat).size(); i++) {
+				System.out.println(DropsGUI.drops.get(mat));
+				DropsGUI.drops.get(mat).dropItem(blockLoc);
 			}
 		}
-		ui.apply(p);
+		DropsGUI.apply(p);
 
 	}
 

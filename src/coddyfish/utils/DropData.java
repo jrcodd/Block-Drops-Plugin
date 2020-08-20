@@ -23,6 +23,9 @@ public class DropData implements ConfigurationSerializable {
 		this.data = data;
 	}
 	public LinkedHashMap<ItemStack, Double> getData() {
+		if (data == null) {
+			data = new LinkedHashMap<ItemStack, Double>();
+		}
 		return data;
 	}
 	public void addItem(ItemStack i) {
@@ -43,9 +46,15 @@ public class DropData implements ConfigurationSerializable {
 	 */
 	public void dropItem(Location location) {
 		Random r = new Random();
-		double d = r.nextDouble() * 100;
+		double d = r.nextDouble() * 100.0;
+		if(data == null) {
+			data = new LinkedHashMap<ItemStack, Double>();
+			return;
+		}
+		if(data.size() == 0) {
+			return;
+		}
 		for (ItemStack i : data.keySet()) {
-			String itemS = i.toString();
 			if (d < data.get(i)) {
 				location.getWorld().dropItemNaturally(location, i);
 

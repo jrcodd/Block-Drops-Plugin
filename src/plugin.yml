@@ -1,5 +1,5 @@
 name: BlockDrops
-author: Coddyfish
+author: jrcodd
 version: 1.0
 main: coddyfish.SetBlockDrops
 depend: [ProtocolLib]

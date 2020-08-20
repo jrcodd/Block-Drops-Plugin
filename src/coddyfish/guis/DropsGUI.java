@@ -23,12 +23,12 @@ import coddyfish.utils.Utils;
 public class DropsGUI {
 	static Material blockClicked;
 	static ItemStack itemClicked;
-	public Inventory inv;
+	public static Inventory inv;
 	public static LinkedHashMap<Material, DropData> drops;
-	public String inventory_name;
-	public int inv_rows = 36;
-	public float chance;
-	SetBlockDrops plugin;
+	public static String inventory_name;
+	public static int inv_rows = 36;
+	public double chance;
+	static SetBlockDrops plugin;
 
 	/**
 	 * @author Coddyfish
@@ -88,7 +88,7 @@ public class DropsGUI {
 	 * @param type the material for the inventory to correspond to
 	 * @return the inventory for the player to open
 	 */
-	public Inventory GUI(Player p, Material type) {
+	public static Inventory GUI(Player p, Material type) {
 		setBlockClicked(type);
 		inventory_name = Utils.chat("&a&l" + type + "'s Drops");
 		inv = Bukkit.createInventory(null, inv_rows, inventory_name);
@@ -123,14 +123,14 @@ public class DropsGUI {
 			DropData drops = new DropData(map);
 			DropsGUI.drops.put(type, drops);
 		}
-toReturn = inv;
+			toReturn = inv;
 			System.out.println(inv);
 			System.out.println(toReturn);
 			return toReturn;
 		
 	}
 
-	public void clicked(Player p, int slot, ItemStack clicked, Inventory inv,
+	public static void clicked(Player p, int slot, ItemStack clicked, Inventory inv,
 			ClickType clickType) {
 		itemClicked = clicked;
 
@@ -167,13 +167,13 @@ toReturn = inv;
 		}
 	}
 
-	public void apply(Player p) {
+	public static void apply(Player p) {
 		saveData(drops);
 		System.out.println(drops);
 		p.closeInventory();
 		System.out.println(drops);
 	}
-	public void saveData(LinkedHashMap<Material, DropData> drops) {
+	public static void saveData(LinkedHashMap<Material, DropData> drops) {
 		// config format: Drops.Material_Name.Number.ItemStack.Chance_To_Drop
 		Set<Material> mats = drops.keySet();
 		// make the config section if there is not already one
@@ -197,9 +197,9 @@ toReturn = inv;
 				ItemStack item = (ItemStack) drops.get(mat).getData().keySet()
 						.toArray()[i];
 				System.out.println(item);
-				// dropsConfig.set("Drops." + mat, i);
-				// dropsConfig.set("Drops." + mat + "." + i, item);
-				dropsConfig.set("Drops." + mat + "." + i + "." + item,
+				dropsConfig.set("Drops." + mat, i);
+				dropsConfig.set("Drops." + mat + "." + i, item);
+				dropsConfig.set("Drops." + mat.name() + "." + i + "." + item,
 						drops.get(mat).getData().get(item));
 			}
 		}
@@ -269,7 +269,7 @@ toReturn = inv;
 	public void setInv_rows(int inv_rows) {
 		this.inv_rows = inv_rows;
 	}
-	public float getChance() {
+	public double getChance() {
 		return chance;
 	}
 	public void setChance(float chance) {

@@ -17,18 +17,22 @@ public class InventoryClickedListener implements Listener {
 		this.plugin = plugin;
 		Bukkit.getPluginManager().registerEvents(this, (Plugin) plugin);
 	}
-
+/**
+ * @author jrcodd
+ * @version 8/20/20
+ * @param e the click event
+ */
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
-		DropsGUI ui = new DropsGUI();
 		String title = e.getView().getTitle();
-		if (title.equals(ui.inventory_name)) {
+		System.out.println(DropsGUI.inventory_name);
+		if (title.equals(DropsGUI.inventory_name)) {
 			e.setCancelled(true);
 			if (e.getCurrentItem() == null) {
 				return;
 			}
 
-			ui.clicked((Player) e.getWhoClicked(), e.getSlot(),
+			DropsGUI.clicked((Player) e.getWhoClicked(), e.getSlot(),
 					e.getCurrentItem(), e.getInventory(), e.getClick());
 		}
 	}
