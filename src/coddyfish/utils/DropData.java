@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
  * @version 8/19/20 the drop data that can be added to each block
  *
  */
-@SerializableAs("BlockDropsData")
 public class DropData  {
 	LinkedHashMap<ItemStack, Double> data;
 	public DropData() {
