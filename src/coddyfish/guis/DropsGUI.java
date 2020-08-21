@@ -59,7 +59,8 @@ public class DropsGUI {
 				return;
 			}
 		}
-		// config format: Drops.Material_Name.Number.ItemStack.Chance_To_Drop
+		// config format: Drops.Material_Name.Number.item.ItemStack
+		// Drops.Material_Name.Nuumber.chance.Double
 		// iterate through all the materials in the config section
 		for (String mat : dropsConfig.getConfigurationSection("Drops")
 				.getKeys(false)) {
@@ -67,10 +68,12 @@ public class DropsGUI {
 			// iterate through all the item numbers
 			for (String itemNumber : dropsConfig
 					.getConfigurationSection("Drops." + mat).getKeys(false)) {
-				item = dropsConfig
-						.getItemStack("Drops." + mat + "." + itemNumber, new ItemStack(Material.ACACIA_BOAT));
+				System.out.println("Thingy: "
+						+ dropsConfig.getItemStack("Drops." + mat + "." + itemNumber + ".item"));
+				item = dropsConfig.getItemStack(
+						"Drops." + mat + "." + itemNumber + ".item");
 				chance = dropsConfig.getDouble(
-						"Drops." + mat + "." + itemNumber + "." + item, 100.0);
+						"Drops." + mat + "." + itemNumber + ".chance" + 100.0);
 				data.addItem(item, chance);
 			}
 			drops.put(Material.getMaterial(mat), data);
@@ -81,7 +84,8 @@ public class DropsGUI {
 		System.out.println(drops);
 	}
 	public static void saveData(LinkedHashMap<Material, DropData> drops) {
-		// config format: Drops.Material_Name.Number.ItemStack.Chance_To_Drop
+		// config format: Drops.Material_Name.Number.item.ItemStack
+		// Drops.Material_Name.Nuumber.chance.Double
 		Set<Material> mats = drops.keySet();
 		// make the config section if there is not already one
 		FileConfiguration dropsConfig = plugin.getDropsConfig();
@@ -99,14 +103,15 @@ public class DropsGUI {
 		// config format: Drops.Material_Name.Number.ItemStack.Chance_To_Drop
 		// iterate through all the materials in the config section
 		for (Material mat : mats) {
-			dropsConfig.set("Drops", mat);
+			dropsConfig.set("Drops", mat.name());
 			for (int i = 0; i < drops.get(mat).getData().keySet().size(); i++) {
 				ItemStack item = (ItemStack) drops.get(mat).getData().keySet()
 						.toArray()[i];
 				System.out.println(item);
-				dropsConfig.set("Drops." + mat, i);
-				dropsConfig.set("Drops." + mat + "." + i, item);
-				dropsConfig.set("Drops." + mat.name() + "." + i + "." + item,
+				dropsConfig.set("Drops." + mat.name(), i);
+				dropsConfig.set("Drops." + mat.name() + "." + i + ".item",
+						item);
+				dropsConfig.set("Drops." + mat.name() + "." + i + ".chance",
 						drops.get(mat).getData().get(item));
 			}
 		}
@@ -124,18 +129,19 @@ public class DropsGUI {
 	/**
 	 * @author Coddyfish
 	 * @version 8/20/20
-	 * @param p the player that will open the gui
-	 * @param type the material for the inventory to correspond to
+	 * @param p
+	 *            the player that will open the gui
+	 * @param type
+	 *            the material for the inventory to correspond to
 	 * @return the inventory for the player to open
 	 */
 	public static Inventory GUI(Player p, Material type) {
-		setBlockClicked(type);
+		blockClicked = type;
 		inventory_name = Utils.chat("&a&l" + type + "'s Drops");
 		inv = Bukkit.createInventory(null, inv_rows, inventory_name);
 		Inventory toReturn = Bukkit.createInventory(null, inv_rows,
 				inventory_name);
 		if (drops.containsKey(type)) {
-
 
 			inv.clear();
 			Utils.createItem(inv, Material.BARRIER, 1, 28, "&c&lClear");
@@ -156,22 +162,22 @@ public class DropsGUI {
 				}
 
 			}
-			
-			} else {
-				
+
+		} else {
+
 			LinkedHashMap<ItemStack, Double> map = new LinkedHashMap<ItemStack, Double>();
 			DropData drops = new DropData(map);
 			DropsGUI.drops.put(type, drops);
 		}
-			toReturn = inv;
-			System.out.println(inv);
-			System.out.println(toReturn);
-			return toReturn;
-		
+		toReturn = inv;
+		System.out.println(inv);
+		System.out.println(toReturn);
+		return toReturn;
+
 	}
 
-	public static void clicked(Player p, int slot, ItemStack clicked, Inventory inv,
-			ClickType clickType) {
+	public static void clicked(Player p, int slot, ItemStack clicked,
+			Inventory inv, ClickType clickType) {
 		itemClicked = clicked;
 
 		if (slot == 35 && clicked.getItemMeta().getDisplayName()
@@ -212,56 +218,6 @@ public class DropsGUI {
 		System.out.println(drops);
 		p.closeInventory();
 		System.out.println(drops);
-	}
-
-
-	public static Material getBlockClicked() {
-		return blockClicked;
-	}
-	public static void setBlockClicked(Material type) {
-		DropsGUI.blockClicked = type;
-	}
-	public static ItemStack getItemClicked() {
-		return itemClicked;
-	}
-	public static void setItemClicked(ItemStack itemClicked) {
-		DropsGUI.itemClicked = itemClicked;
-	}
-	public Inventory getInv() {
-		return inv;
-	}
-	public void setInv(Inventory inv) {
-		this.inv = inv;
-	}
-	public LinkedHashMap<Material, DropData> getDrops() {
-		return drops;
-	}
-	public void setDrops(LinkedHashMap<Material, DropData> drops) {
-		this.drops = drops;
-	}
-	public String getInventory_name() {
-		return inventory_name;
-	}
-	public void setInventory_name(String inventory_name) {
-		this.inventory_name = inventory_name;
-	}
-	public int getInv_rows() {
-		return inv_rows;
-	}
-	public void setInv_rows(int inv_rows) {
-		this.inv_rows = inv_rows;
-	}
-	public double getChance() {
-		return chance;
-	}
-	public void setChance(float chance) {
-		this.chance = chance;
-	}
-	public SetBlockDrops getPlugin() {
-		return plugin;
-	}
-	public void setPlugin(SetBlockDrops plugin) {
-		this.plugin = plugin;
 	}
 
 }
